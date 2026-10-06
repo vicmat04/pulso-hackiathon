@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PULSO · De la señal a la decisión</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">PUL<span>SO</span></div>
+    <p class="tagline">Radar informativo de Panamá.<br>IA para investigar antes de publicar.</p>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#radar" class="active">◉ Radar</a>
+      <a href="#cases">⌁ Historias</a>
+      <a href="#ficha">◌ Evidencias</a>
+      <a href="#mision">◈ Misiones</a>
+      <a href="#draft">✦ Briefs TVN</a>
+      <a href="#revision">✓ Revisión humana</a>
+      <a href="#quality">⚙ Calidad</a>
+    </nav>
+    <div class="status" id="status" role="status"></div>
+  </aside>
+
+  <main class="main">
+    <div class="notice" id="synthetic" hidden>Datos sintéticos de prueba. Reemplazar por el paquete oficial «Panamá · Señales y Evidencias v1».</div>
+
+    <header class="topbar" id="radar">
+      <div>
+        <h1>Radar informativo</h1>
+        <p id="subtitle"></p>
+      </div>
+      <span class="pill" id="rules"></span>
+    </header>
+
+    <div class="dashboard-grid">
+      <section class="dashboard-primary">
+        <section class="panel hero" aria-labelledby="hero-title">
+          <div>
+            <p class="eyebrow">Caso seleccionado · prioridad editorial</p>
+            <h2 id="hero-title"></h2>
+            <p id="hero-copy" class="hero-copy"></p>
+            <div class="badges" id="hero-badges" aria-label="Alertas del caso"></div>
+          </div>
+          <div class="score" id="score-ring" role="img" aria-label="Puntaje de prioridad del caso seleccionado">
+            <strong id="hero-score"></strong><span>prioridad</span>
+          </div>
+        </section>
+
+        <section class="stats" id="stats" aria-label="Resumen del snapshot"></section>
+
+        <section class="panel attention" aria-labelledby="attention-title">
+          <div class="section-title"><h2 id="attention-title">Historias que merecen revisión</h2><span>ordenadas por PULSO Score</span></div>
+          <ol class="cases" id="cases"></ol>
+        </section>
+
+        <section class="panel evidence-map" aria-labelledby="map-title">
+          <div class="section-title"><h2 id="map-title">Mapa de evidencia</h2><span id="map-summary"></span></div>
+          <p class="muted">Procedencias mostradas en plano: la repetición no establece una dirección de copia ni equivale a corroboración.</p>
+          <ul class="evidence" id="evidence-map"></ul>
+          <p class="legend" id="map-legend"></p>
+        </section>
+      </section>
+
+      <aside class="dashboard-side">
+        <section class="panel" id="mision" aria-labelledby="mission-title">
+          <div class="section-title"><h2 id="mission-title">Misión periodística</h2><span id="mission-score"></span></div>
+          <p id="mission-intro" class="muted"></p>
+          <ol id="mission-list" class="mission-list"></ol>
+          <div class="chips"><span class="chip" id="mission-evidence"></span></div>
+        </section>
+
+        <section class="panel" aria-labelledby="devil-title">
+          <div class="section-title"><h2 id="devil-title">Abogado del Diablo</h2><span>control anti-alucinación</span></div>
+          <div class="devil-stats" id="devil-stats"></div>
+          <p id="devil-advice" class="devil-advice"></p>
+        </section>
+
+        <section class="panel" id="consultas" aria-labelledby="ask-title">
+          <div class="section-title"><h2 id="ask-title">Pregúntale a PULSO</h2><span id="chat-mode"></span></div>
+          <div class="chatlog" id="chatlog" aria-live="polite"></div>
+          <div id="ask">
+            <form class="ask" id="ask-form">
+              <label for="q" class="sr-only">Pregunta</label>
+              <input id="q" placeholder="Pregunta en español…" autocomplete="off">
+              <button type="submit">Preguntar</button>
+            </form>
+            <div class="suggest" id="suggest"></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="detail-heading" aria-labelledby="details-title">
+      <p class="eyebrow">Seguimiento trazable</p>
+      <h2 id="details-title">Ficha, borrador y control humano</h2>
+      <p>El puntaje ordena la atención; la evidencia y la decisión editorial se conservan por separado.</p>
+    </section>
+
+    <div class="grid details-grid">
+      <section class="col">
+        <div class="panel" id="ficha">
+          <div class="section-title"><h2>Ficha de evidencia</h2><span id="ficha-id"></span></div>
+          <h3 class="case-title" id="f-title"></h3>
+          <div class="chips" id="f-chips"></div>
+          <div class="alerts" id="f-alerts"></div>
+          <dl class="facts">
+            <dt>Qué se reporta</dt><dd id="f-que"></dd>
+            <dt>Quién lo reporta</dt><dd id="f-quien"></dd>
+            <dt>Qué está respaldado</dt><dd id="f-resp"></dd>
+            <dt>Qué falta comprobar</dt><dd id="f-falta"></dd>
+            <dt>Acción recomendada</dt><dd id="f-accion"></dd>
+          </dl>
+          <h3>Procedencias</h3>
+          <p class="muted" id="f-proc-sum"></p>
+          <ul class="procs" id="f-procs"></ul>
+          <div id="f-contra"></div>
+          <div id="f-ctx"></div>
+        </div>
+
+        <div class="panel" id="draft">
+          <div class="section-title"><h2>Borrador editorial</h2><span id="b-gen"></span></div>
+          <div class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" data-tab="brief">Brief</button>
+            <button role="tab" aria-selected="false" data-tab="guion">Guion 45–60 s</button>
+            <button role="tab" aria-selected="false" data-tab="copy">Copy digital</button>
+          </div>
+          <div id="b-body"></div>
+        </div>
+      </section>
+
+      <aside class="col">
+        <div class="panel">
+          <div class="section-title"><h2>Puntaje desglosado</h2><span id="p-big"></span></div>
+          <dl class="breakdown" id="breakdown"></dl>
+          <p class="formula" id="formula"></p>
+        </div>
+
+        <div class="panel" id="revision">
+          <div class="section-title"><h2>Revisión humana</h2><span id="r-state"></span></div>
+          <label class="field" for="revisor">Persona revisora</label>
+          <input id="revisor" placeholder="Nombre y rol" autocomplete="name">
+          <label class="field" for="nota">Nota</label>
+          <input id="nota" placeholder="Corrección o motivo">
+          <div class="actions" id="r-actions"></div>
+          <p class="muted" id="r-msg" role="status"></p>
+          <ul class="log" id="r-log"></ul>
+          <button class="secondary" id="r-export" type="button">Descargar registro (JSONL)</button>
+          <p class="muted small">Aprobar como borrador no significa publicar. Importa el registro con <code>pulso importar-revisiones</code> y cópialo a Notion.</p>
+        </div>
+
+        <div class="panel" id="quality">
+          <div class="section-title"><h2>Calidad de datos</h2><span>reporte de carga</span></div>
+          <div id="quality-body"></div>
+        </div>
+      </aside>
+    </div>
+    <footer class="footer-note">GUI-VIC · hackIAthon 2026 · Resultados para revisión humana; nada se publica automáticamente.</footer>
+  </main>
+</div>
+<script src="snapshot.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

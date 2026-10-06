@@ -1,0 +1,43 @@
+[project]
+name = "pulso"
+version = "0.2.0"
+description = "PULSO · De la señal a la decisión. Copiloto editorial para TVN (hackIAthon 2026)"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic==2.*",
+  "typer>=0.12,<1",
+  "numpy>=1.26,<3",
+  "scikit-learn>=1.4,<2",
+  "tzdata>=2024.1",  # Datos IANA para ZoneInfo en Windows
+]
+
+[project.scripts]
+pulso = "pulso.cli:app"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.5"]
+# Embeddings multilingües (mejor agrupación y cruce español/inglés). Descargar modelo con red.
+nlp = ["sentence-transformers>=3"]
+# LLM opcional para reescritura del brief; siempre con caída a plantilla.
+llm = ["ollama>=0.3", "anthropic>=0.40"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pulso"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501", "E741"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

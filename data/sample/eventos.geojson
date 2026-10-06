@@ -1,0 +1,9 @@
+{"type": "FeatureCollection", "metadata": {"title": "SINTÉTICO - formato USGS GeoJSON, solo pruebas"},
+ "features": [
+  {"type": "Feature", "id": "sint2024a001",
+   "properties": {"mag": 5.1, "place": "Evento sintético, sur de Chiriquí", "time": 1731391080000, "updated": 1731400000000, "status": "reviewed", "url": "https://ejemplo.invalid/usgs/sint2024a001"},
+   "geometry": {"type": "Point", "coordinates": [-82.4, 7.9, 20.0]}},
+  {"type": "Feature", "id": "sint2024a002",
+   "properties": {"mag": 3.4, "place": "Evento sintético, golfo de Panamá", "time": 1715000000000, "updated": 1715001000000, "status": "reviewed", "url": "https://ejemplo.invalid/usgs/sint2024a002"},
+   "geometry": {"type": "Point", "coordinates": [-79.5, 8.2, 10.0]}}
+ ]}

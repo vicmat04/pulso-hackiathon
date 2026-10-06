@@ -1,0 +1,8 @@
+{
+  "version": "sintetico-0.1",
+  "fecha_corte_UTC": "2025-09-30T23:00:00Z",
+  "descripcion": "Set SINTÉTICO de casos controlados para T01–T10. Reemplazar por el paquete oficial 'Panamá · Señales y Evidencias v1'.",
+  "consultas": {"noticias": "casos escritos a mano", "indicadores": "valores sintéticos en formato Banco Mundial", "eventos": "eventos sintéticos en formato USGS"},
+  "licencia_condiciones": {"noticias.csv": "sintético, libre para pruebas", "indicadores.csv": "sintético", "eventos.geojson": "sintético"},
+  "transformaciones": ["ninguna: archivos escritos directamente en el formato del contrato"]
+}

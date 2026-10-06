@@ -86,9 +86,9 @@ Cada candidato autorado se revisará contra su predecesor. El lockfile se manten
 
 ### UI-5 · Crear la base Git y publicar
 - [x] Crear un commit inicial convencional con el proyecto completo autorizado.
-- [ ] Reescribir la importación inicial como la secuencia de commits revisables elegida.
-- [ ] Configurar `origin` con el remoto vacío autorizado.
-- [ ] Publicar la rama principal y verificar el estado remoto.
+- [x] Reescribir la importación inicial como la secuencia de commits revisables elegida.
+- [x] Configurar `origin` con el remoto vacío autorizado.
+- [x] Publicar la rama principal y verificar el estado remoto.
 - Ruta: entrega explícitamente autorizada por el usuario; no se creará PR ni se hará merge adicional.
 
 ### UI-6 · Persistir memoria del proyecto

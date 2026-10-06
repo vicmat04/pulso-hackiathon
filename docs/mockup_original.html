@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PULSO — Radar informativo de Panamá</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Inter, Arial, Helvetica, sans-serif; background:#0d1630; color:#f6f8ff; }
+  .app { display:grid; grid-template-columns: 240px 1fr; min-height:100vh; }
+  .sidebar { background:#111b38; border-right:1px solid rgba(255,255,255,.08); padding:24px 18px; position:sticky; top:0; height:100vh; }
+  .brand { font-size:28px; font-weight:900; letter-spacing:.5px; margin-bottom:8px; }
+  .brand span { color:#ff9f1c; }
+  .tagline { color:#8fa6d9; font-size:12px; line-height:1.45; margin-bottom:28px; }
+  .nav a { display:flex; gap:10px; align-items:center; padding:12px 14px; margin:8px 0; border-radius:12px; color:#cbd5f2; text-decoration:none; font-size:14px; }
+  .nav a.active, .nav a:hover { background:#1c2a52; color:#fff; }
+  .small-card { margin-top:26px; background:linear-gradient(180deg,#17254d,#121c3b); padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,.07); }
+  .small-card b { display:block; font-size:13px; margin-bottom:6px; }
+  .small-card p { margin:0; color:#9fb0d7; font-size:12px; line-height:1.45; }
+  .main { padding:26px; }
+  .topbar { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:22px; }
+  .topbar h1 { margin:0; font-size:26px; }
+  .topbar p { margin:5px 0 0; color:#91a4d0; font-size:13px; }
+  .pill { padding:8px 12px; border-radius:999px; background:#132344; border:1px solid rgba(255,255,255,.08); color:#aebde1; font-size:12px; }
+  .grid { display:grid; grid-template-columns: 1.3fr .7fr; gap:18px; }
+  .panel { background:#121c3b; border:1px solid rgba(255,255,255,.07); border-radius:18px; padding:18px; box-shadow:0 14px 34px rgba(0,0,0,.18); }
+  .hero { display:grid; grid-template-columns: 1fr 180px; gap:18px; align-items:center; background:linear-gradient(135deg,#183266,#132347 58%,#35234e); }
+  .score { width:150px; height:150px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column; margin:auto; background:conic-gradient(#ff9f1c 0 74%, #23335e 74% 100%); position:relative; }
+  .score::after { content:""; width:116px; height:116px; background:#142348; border-radius:50%; position:absolute; }
+  .score strong,.score span { position:relative; z-index:2; }
+  .score strong { font-size:42px; }
+  .score span { font-size:12px; color:#b7c5e8; }
+  .hero h2 { font-size:22px; margin:0 0 8px; }
+  .hero p { color:#b4c1de; line-height:1.55; margin:0 0 14px; font-size:14px; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; }
+  .badge { padding:7px 10px; border-radius:999px; font-size:11px; border:1px solid rgba(255,255,255,.1); background:#132446; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px; }
+  .stat { padding:14px; border-radius:14px; background:#111a36; border:1px solid rgba(255,255,255,.06); }
+  .stat .n { font-size:24px; font-weight:800; }
+  .stat .l { font-size:11px; color:#91a4d0; margin-top:4px; }
+  .section-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .section-title h3 { margin:0; font-size:16px; }
+  .section-title span { color:#8ea1ca; font-size:12px; }
+  .story { display:grid; grid-template-columns:54px 1fr auto; gap:12px; align-items:center; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.06); }
+  .story:last-child { border-bottom:none; }
+  .rank { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; background:#1a2c58; }
+  .story h4 { margin:0 0 5px; font-size:14px; }
+  .story p { margin:0; color:#90a4d0; font-size:12px; }
+  .sev { font-size:11px; padding:7px 9px; border-radius:999px; white-space:nowrap; }
+  .red { background:rgba(255,82,82,.13); color:#ff8a8a; }
+  .orange { background:rgba(255,159,28,.14); color:#ffb65a; }
+  .purple { background:rgba(174,111,255,.14); color:#c79eff; }
+  .blue { background:rgba(81,165,255,.14); color:#8bc1ff; }
+  .gray { background:rgba(180,190,210,.12); color:#c6cfdf; }
+  .chatbox { background:#0e1732; border:1px solid rgba(255,255,255,.07); border-radius:14px; padding:14px; min-height:220px; display:flex; flex-direction:column; justify-content:space-between; }
+  .bubble { background:#17274f; padding:11px 12px; border-radius:12px; font-size:12px; line-height:1.5; color:#dbe4ff; }
+  .input { margin-top:12px; display:flex; gap:8px; }
+  .input input { flex:1; background:#111c3a; color:#fff; border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:11px; outline:none; }
+  .input button { border:none; background:#ff9f1c; color:#111; font-weight:800; border-radius:10px; padding:0 14px; cursor:pointer; }
+  .evidence { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+  .node { padding:12px; border-radius:12px; background:#0f1834; border:1px solid rgba(255,255,255,.07); font-size:12px; text-align:center; }
+  .node b { display:block; margin-bottom:4px; }
+  .legend { margin-top:10px; color:#8ea1ca; font-size:11px; }
+  .footer-note { margin-top:18px; color:#7f91bd; font-size:11px; text-align:center; }
+  @media(max-width:980px){ .app{grid-template-columns:1fr}.sidebar{display:none}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)} }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">PUL<span>SO</span></div>
+    <div class="tagline">Radar informativo de Panamá<br>IA para investigar antes de publicar.</div>
+    <nav class="nav">
+      <a class="active" href="#">◉ Radar</a>
+      <a href="#">⌁ Historias</a>
+      <a href="#">◌ Evidencias</a>
+      <a href="#">◈ Misiones</a>
+      <a href="#">✦ Briefs TVN</a>
+      <a href="#">✓ Revisión humana</a>
+      <a href="#">⚙ Configuración</a>
+    </nav>
+    <div class="small-card">
+      <b>Estado del sistema</b>
+      <p>Snapshot cargado · 100% offline para demo. Última validación: correcta.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Radar informativo</h1>
+        <p>Señales priorizadas para la sala de redacción de TVN.</p>
+      </div>
+      <div class="pill">Modo editorial · Panamá</div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <div class="panel hero">
+          <div>
+            <h2>Pulso Nacional</h2>
+            <p>La IA detecta contradicciones, repetición de fuentes, vacíos de evidencia y temas que merecen investigación humana.</p>
+            <div class="badges">
+              <span class="badge">5 historias requieren atención</span>
+              <span class="badge">2 contradicciones</span>
+              <span class="badge">1 eco informativo</span>
+            </div>
+          </div>
+          <div class="score"><strong>74</strong><span>nivel de atención</span></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="n">127</div><div class="l">Noticias procesadas</div></div>
+          <div class="stat"><div class="n">38</div><div class="l">Eventos agrupados</div></div>
+          <div class="stat"><div class="n">12</div><div class="l">Fuentes independientes</div></div>
+          <div class="stat"><div class="n">93%</div><div class="l">Afirmaciones con evidencia</div></div>
+        </div>
+
+        <div class="panel" style="margin-top:18px;">
+          <div class="section-title">
+            <h3>Historias que merecen revisión</h3>
+            <span>ordenadas por PULSO Score</span>
+          </div>
+          <div class="story">
+            <div class="rank">87</div>
+            <div><h4>Logística / Canal</h4><p>Dos versiones incompatibles sobre el mismo evento.</p></div>
+            <div class="sev red">Contradicción</div>
+          </div>
+          <div class="story">
+            <div class="rank">82</div>
+            <div><h4>Economía</h4><p>Dato actual requiere contexto con serie oficial histórica.</p></div>
+            <div class="sev orange">Contexto faltante</div>
+          </div>
+          <div class="story">
+            <div class="rank">78</div>
+            <div><h4>Turismo</h4><p>7 publicaciones detectadas, pero solo 1 procedencia independiente.</p></div>
+            <div class="sev purple">Eco informativo</div>
+          </div>
+          <div class="story">
+            <div class="rank">72</div>
+            <div><h4>Evento natural</h4><p>Cambio relevante frente al patrón histórico disponible.</p></div>
+            <div class="sev blue">Anomalía</div>
+          </div>
+          <div class="story">
+            <div class="rank">68</div>
+            <div><h4>Servicios públicos</h4><p>Historia importante, pero faltan fuentes primarias.</p></div>
+            <div class="sev gray">Vacío</div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:18px;">
+          <div class="section-title">
+            <h3>Mapa de evidencia — Turismo</h3>
+            <span>7 artículos → 1 procedencia</span>
+          </div>
+          <div class="evidence">
+            <div class="node"><b>TVN</b>Replica</div>
+            <div class="node"><b>Medio A</b>Replica</div>
+            <div class="node"><b>Medio B</b>Replica</div>
+            <div class="node"><b>Agencia X</b>Fuente primaria</div>
+          </div>
+          <div class="legend">Resultado: alta repetición, baja corroboración independiente.</div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <div class="section-title">
+            <h3>Misión periodística</h3>
+            <span>PULSO 78</span>
+          </div>
+          <p style="color:#b5c2df;font-size:13px;line-height:1.55;">Antes de preparar el contenido, PULSO recomienda completar estas verificaciones:</p>
+          <ol style="padding-left:18px;color:#e8edff;font-size:13px;line-height:1.8;">
+            <li>Obtener una segunda fuente independiente.</li>
+            <li>Confirmar el dato con una fuente oficial.</li>
+            <li>Verificar la fecha original del evento.</li>
+          </ol>
+          <div class="badge" style="display:inline-block;margin-top:6px;">Evidencia: insuficiente</div>
+        </div>
+
+        <div class="panel" style="margin-top:18px;">
+          <div class="section-title">
+            <h3>Abogado del Diablo</h3>
+            <span>control anti-alucinación</span>
+          </div>
+          <div class="stats" style="grid-template-columns:repeat(3,1fr); margin-top:8px;">
+            <div class="stat"><div class="n">9</div><div class="l">Respaldadas</div></div>
+            <div class="stat"><div class="n">2</div><div class="l">Parciales</div></div>
+            <div class="stat"><div class="n">1</div><div class="l">Sin evidencia</div></div>
+          </div>
+          <p style="font-size:12px;color:#ffbcbc;line-height:1.5;margin-top:12px;">Recomendación: NO aprobar todavía el borrador.</p>
+        </div>
+
+        <div class="panel" style="margin-top:18px;">
+          <div class="section-title">
+            <h3>Pregúntale a PULSO</h3>
+            <span>asistente contextual</span>
+          </div>
+          <div class="chatbox">
+            <div class="bubble">¿Qué cinco temas debería revisar hoy y por qué?</div>
+            <div class="input"><input value="Escribe una pregunta..."/><button>→</button></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer-note">Mockup conceptual · GUI-VIC · hackIAthon 2026</div>
+  </main>
+</div>
+</body>
+</html>
